@@ -9,6 +9,7 @@ const Auth = () => {
     const {
       target: { name, value },
     } = event;
+    console.log(name, value);
     if (name === "email") {
       setEmail(value);
     } else if (name === "password") {
@@ -17,14 +18,17 @@ const Auth = () => {
   };
   const onSubmit = async (event) => {
     event.preventDefault();
+    console.log(email, password);
     try {
       let data;
       if (newAccount) {
+        console.log("create user");
         data = await auth.createUserWithEmailAndPassword(
           email,
           password
         );
       } else {
+        console.log("log in");
         data = await auth.signInWithEmailAndPassword(email, password);
       }
       console.log(data);

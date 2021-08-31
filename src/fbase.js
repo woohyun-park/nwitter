@@ -1,24 +1,19 @@
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import "firebase/auth";
-require("firebase/firestore");
+import "firebase/database";
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_DATABASE_URL,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGIN_ID,
-  appId: process.env.REACT_APP_APP_ID,
+  apiKey: "AIzaSyD41ocZYgAojWegeNf6-v-z5hmTVdAKdus",
+  authDomain: "nwitter-477fa.firebaseapp.com",
+  databaseURL: "https://nwitter-477fa-default-rtdb.firebaseio.com",
+  projectId: "nwitter-477fa",
+  storageBucket: "nwitter-477fa.appspot.com",
+  messagingSenderId: "621862957734",
+  appId: "1:621862957734:web:4af243679ad75963317a67"
 };
 
-const Firebase = firebase.default.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
-export const auth = firebase.default.firestore();
-
-export const db = firebase.default.firestore();
-
-
-
-
- export default Firebase;
+export const auth = firebase.auth()
+export const db = firebase.database();
+export default firebase;
