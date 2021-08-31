@@ -7,6 +7,12 @@ const Auth = () => {
         const {
             target: {name, value},
         } = event;
+        // 아래와 같은 뜻
+        // const name = event.target.name;
+        // const value =  event.target.value;
+        // 아래와도 같은 뜻
+        // const {name, value} = event.target;
+        
         if(name === "email"){
             setEmail(value);
         } else if (name === "password"){
