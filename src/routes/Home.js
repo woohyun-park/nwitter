@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
-import { db } from "../fbase";
+import { db, storage } from "../fbase";
 import Nweet from "../components/Nweets";
+import { v4 as uuidv4 } from "uuid";
 
 const Home = ({userObj}) => {
     const [nweet, setNweet] = useState("");
     const [nweets, setNweets] = useState([]);
+    const [attachment, setAttachment] = useState();
     // const getNweets = async() => {
     //     const dbNweets = await db.collection("nweets").get();
     //     dbNweets.forEach(doc => {
@@ -33,25 +35,46 @@ const Home = ({userObj}) => {
     }, []);
     const onSubmit = async (event) => {
         event.preventDefault();
-        await db.collection("nweets").add({
-            text: nweet,
-            createdAt: Date.now(),
-            creatorId: userObj.uid,
-        });
-        setNweet("");
+        const fileRef = storage.ref().child(`${userObj.uid}/${uuidv4()}`);
+        const response = await fileRef.putString(attachment, "data_url");
+        console.log(response);
+        // await db.collection("nweets").add({
+        //     text: nweet,
+        //     createdAt: Date.now(),
+        //     creatorId: userObj.uid,
+        // });
+        // setNweet("");
     }
     const onChange = (event) => {
         const value = event.target.value;
         setNweet(value);
     }
+    const onFileChange = (event) => {
+        const files = event.target.files;
+        const theFile = files[0];
+        const reader = new FileReader();
+        reader.onloadend = (finishedEvent) => {
+            setAttachment(finishedEvent.currentTarget.result);
+        }
+        reader.readAsDataURL(theFile);
+    }
+    const onClearAttachment = () => setAttachment(null);
     return (
         <div>
             <form onSubmit={onSubmit}>
                 <input 
                     value={nweet}
                     onChange={onChange}
-                    type="text" placeholder="What's on your mind?" maxLength={120}/>
+                    type="text" placeholder="What's on your mind?" maxLength={120}
+                />
+                <input type="file" accept="image/*" onChange={onFileChange}/>
                 <input type="submit" value="Nweet" />
+                {attachment && (
+                    <div>
+                        <img src={attachment} width="50px" height="50px" />
+                        <button onClick={onClearAttachment}>Clear</button>
+                    </div>
+                )}
             </form>
             <div>
                 {nweets.map((nweet) => (
