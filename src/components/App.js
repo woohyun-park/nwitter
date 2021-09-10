@@ -11,6 +11,7 @@ function App() {
         setUserObj({
           displayName: user.displayName,
           uid: user.uid,
+          birthday: new Date(),
           updateProfile: (args) => user.updateProfile(args)
         });
       }else{

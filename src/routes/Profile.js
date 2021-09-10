@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 export default ({userObj, refreshUser}) => {
     const history = useHistory();
     const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
+    const [newBirthday, setNewBirthday] = useState(new Date());
     const onLogOutClick = () => {
         auth.signOut();
         history.push("/");
@@ -14,7 +15,6 @@ export default ({userObj, refreshUser}) => {
             .where("creatorId", "==", userObj.uid)
             .orderBy("createdAt")
             .get();
-        console.log(nweets.docs.map((doc) => doc.data()));
     }
     useEffect(() => {
         getMyNweets();
@@ -23,6 +23,10 @@ export default ({userObj, refreshUser}) => {
         const value = event.target.value;
         setNewDisplayName(value);
     }
+    const onBirthdayChange = (event) => {
+        const value = event.target.value;
+        setNewBirthday(value);
+    }
     const onSubmit = async (event) => {
         event.preventDefault();
         if(userObj.displayName !== newDisplayName){
@@ -30,6 +34,9 @@ export default ({userObj, refreshUser}) => {
                 displayName: newDisplayName
             });
             refreshUser();
+        }
+        if(userObj.birthday !== newBirthday){
+            userObj.birthday = newBirthday;
         }
     }
     return (
@@ -40,6 +47,11 @@ export default ({userObj, refreshUser}) => {
                 placeholder="Display name"
                 onChange={onChange}
                 value={newDisplayName}
+            />
+            <input
+                type="date"
+                onChange={onBirthdayChange}
+                value={newBirthday}
             />
             <input
                 type="submit"
